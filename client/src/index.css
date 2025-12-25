@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+	/* Brand */
+	--primary: #03a8f4;
+	--primary-hover: #0288d1;
+
+	/* Backgrounds */
+	--background: #ffffff;
+	--surface: #f9fafb;
+	--surface-alt: #f1f5f9;
+
+	/* Text */
+	--text-primary: #111827;
+	--text-secondary: #4b5563;
+	--text-muted: #6b7280;
+}
+
+html,
+body {
+	width: 100dvw;
+	overflow-x: hidden;
+	background-color: var(--background);
+	color: black;
+	scroll-behavior: smooth;
+	font-family: "Mona Sans", sans-serif;
+}
+
+section {
+	width: 100dvw;
+}
+
+@theme {
+	/* Colors */
+	--color-primary: var(--primary);
+	--color-primary-hover: var(--primary-hover);
+
+	--color-background: var(--background);
+	--color-surface: var(--surface);
+	--color-surface-alt: var(--surface-alt);
+
+	--color-text-primary: var(--text-primary);
+	--color-text-secondary: var(--text-secondary);
+	--color-text-muted: var(--text-muted);
+
+	--color-border: var(--border);
+
+	/* Breakpoints */
+	--breakpoint-xs: 420px;
+}
+
+@layer utilities {
+	.gradientButton {
+		@apply bg-gradient-to-r from-blue-600 to-[#03a8f4] text-white;
+	}
+
+	.gradientContainer {
+		@apply bg-gradient-to-r from-[#03a8f4] to-blue-600 text-white;
+	}
+
+	.flexCenter {
+		@apply flex items-center justify-center;
+	}
+}
+
+@layer components {
+}
