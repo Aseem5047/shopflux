@@ -2,6 +2,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+* {
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+}
+
 :root {
 	/* Brand */
 	--primary: #03a8f4;
@@ -32,6 +37,31 @@ section {
 	width: 100dvw;
 }
 
+/* scrollbar styles */
+
+.noScrollbar::-webkit-scrollbar {
+	display: none !important;
+}
+
+::-webkit-scrollbar {
+	height: 0.25rem;
+	width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #03a8f4;
+	border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #03a8f477;
+}
+
+::-webkit-scrollbar-track {
+	background-color: transparent;
+	border-radius: 9999px;
+}
+
 @theme {
 	/* Colors */
 	--color-primary: var(--primary);
@@ -53,17 +83,108 @@ section {
 
 @layer utilities {
 	.gradientButton {
-		@apply bg-gradient-to-r from-blue-600 to-[#03a8f4] text-white;
+		@apply bg-linear-to-r from-blue-600 to-[#03a8f4] text-white;
+	}
+
+	.gradientButtonAlternate {
+		@apply bg-linear-to-r from-[#03a8f4] to-blue-600 text-white;
 	}
 
 	.gradientContainer {
-		@apply bg-gradient-to-r from-[#03a8f4] to-blue-600 text-white;
+		@apply bg-linear-to-r from-[#03a8f4] to-blue-600 text-white;
+	}
+
+	.gradientContainerAlternate {
+		@apply bg-linear-to-r from-blue-600 to-[#03a8f4] text-white;
+	}
+
+	.hoverEffectText {
+		@apply hover:bg-primary hover:text-white hover:px-4 hover:py-2 rounded-xl transition-all duration-500 transform ease-in-out  cursor-pointer;
 	}
 
 	.flexCenter {
 		@apply flex items-center justify-center;
 	}
+
+	.errorMessage {
+		@apply text-red-500 text-sm px-1 text-start w-full;
+	}
 }
 
 @layer components {
+	.input {
+		@apply w-full
+		border
+		rounded-lg
+		border-gray-300
+		outline-none
+		p-4
+		hover:bg-gray-100
+		focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition;
+	}
+
+	.button {
+		@apply flex
+		items-center
+		justify-center
+		p-4
+		w-full
+		max-w-md
+		shadow-md
+		rounded-lg
+		font-medium
+		text-base
+		mt-4
+		hover:opacity-80 transition-transform active:scale-95;
+	}
+
+	.authenticationContainer {
+		@apply w-full
+		h-screen
+		md:w-[90vw]
+		md:max-w-5xl
+		md:h-[90vh]
+		bg-white
+		grid
+		grid-cols-1
+		md:grid-cols-2
+		md:rounded-2xl
+		md:shadow-xl
+		border
+		border-gray-200
+		overflow-hidden;
+	}
+}
+
+/* Animations */
+
+.slideInRight {
+	animation: slideInRight 1s ease-in-out;
+}
+
+.slideInLeft {
+	animation: slideInLeft 1s ease-in-out;
+}
+
+/* Keyframes */
+@keyframes slideInRight {
+	0% {
+		transform: translateX(100px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideInLeft {
+	0% {
+		transform: translateX(-100px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
 }

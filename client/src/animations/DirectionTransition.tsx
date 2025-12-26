@@ -5,11 +5,13 @@ import gsap from "gsap";
 interface Props {
 	children: React.ReactNode;
 	direction?: "left" | "right";
+	triggerKey: string;
 }
 
 export default function DirectionTransition({
 	children,
 	direction = "right",
+	triggerKey,
 }: Props) {
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -20,13 +22,14 @@ export default function DirectionTransition({
 				right: { x: 30, opacity: 0 },
 			};
 
-			gsap.from(ref.current, {
-				...animations[direction],
+			gsap.fromTo(ref.current, animations[direction], {
+				x: 0,
+				opacity: 1,
 				duration: 0.5,
 				ease: "power2.in",
 			});
 		},
-		{ scope: ref }
+		{ dependencies: [triggerKey], scope: ref }
 	);
 
 	return <div ref={ref}>{children}</div>;
