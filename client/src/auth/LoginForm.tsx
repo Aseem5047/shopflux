@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Spinner } from "@/components/shared/Spinner";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +41,7 @@ export default function LoginForm() {
 		<Form {...form}>
 			<div className="text-center mb-2">
 				<h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-					Authenticate to your account
+					Welcome Back
 				</h1>
 				<p className="text-sm md:text-base text-gray-500 mt-1">
 					Enter your credentials to access your account
@@ -64,7 +65,7 @@ export default function LoginForm() {
 						<FormItem className="w-full max-w-md">
 							<FormLabel className="sr-only">Email or Username</FormLabel>
 							<FormControl>
-								<input
+								<Input
 									placeholder="email or username"
 									autoComplete="username"
 									className="input flex-1"
@@ -84,7 +85,7 @@ export default function LoginForm() {
 							<FormLabel className="sr-only">Password</FormLabel>
 							<FormControl>
 								<div className="relative w-full">
-									<input
+									<Input
 										className="input pr-14"
 										type={showPassword ? "text" : "password"}
 										placeholder="password"

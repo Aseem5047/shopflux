@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Spinner } from "@/components/shared/Spinner";
 import { useEffect, useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export default function RegisterForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -93,7 +94,7 @@ export default function RegisterForm() {
 						<FormItem className="w-full max-w-md">
 							<FormLabel className="sr-only">Username</FormLabel>
 							<FormControl>
-								<input className="input" placeholder="username" {...field} />
+								<Input className="input" placeholder="username" {...field} />
 							</FormControl>
 							<FormMessage className="errorMessage" />
 						</FormItem>
@@ -107,7 +108,7 @@ export default function RegisterForm() {
 						<FormItem className="w-full max-w-md">
 							<FormLabel className="sr-only">Full Name</FormLabel>
 							<FormControl>
-								<input className="input" placeholder="full name" {...field} />
+								<Input className="input" placeholder="full name" {...field} />
 							</FormControl>
 							<FormMessage className="errorMessage" />
 						</FormItem>
@@ -121,7 +122,7 @@ export default function RegisterForm() {
 						<FormItem className="w-full max-w-md">
 							<FormLabel className="sr-only">Email</FormLabel>
 							<FormControl>
-								<input
+								<Input
 									className="input"
 									type="email"
 									placeholder="email"
@@ -141,7 +142,7 @@ export default function RegisterForm() {
 							<FormLabel className="sr-only">Password</FormLabel>
 							<FormControl>
 								<div className="relative w-full">
-									<input
+									<Input
 										className="input pr-14"
 										type={showPassword ? "text" : "password"}
 										placeholder="password"
@@ -198,7 +199,7 @@ export default function RegisterForm() {
 							<FormLabel className="sr-only">Confirm Password</FormLabel>
 							<FormControl>
 								<div className="relative w-full">
-									<input
+									<Input
 										className="input pr-14"
 										type={showConfirmPassword ? "text" : "password"}
 										placeholder="confirm password"

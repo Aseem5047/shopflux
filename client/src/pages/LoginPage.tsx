@@ -9,7 +9,7 @@ const LoginPage = () => {
 
 	return (
 		<div className="authenticationContainer noScrollbar">
-			<div className="h-full overflow-y-auto noScrollbar flex flex-col items-center px-4 py-6 md:py-10">
+			<div className="h-full overflow-y-auto noScrollbar flex flex-col items-center justify-center px-4 py-6 md:py-10">
 				<LoginForm />
 			</div>
 			<div className="flexCenter flex-col gradientContainer px-6 py-10 text-center">

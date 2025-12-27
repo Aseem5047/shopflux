@@ -135,7 +135,7 @@ section {
 		font-medium
 		text-base
 		mt-4
-		hover:opacity-80 transition-transform active:scale-95;
+		hover:opacity-80 transition-transform active:scale-95 cursor-pointer;
 	}
 
 	.authenticationContainer {
