@@ -17,6 +17,8 @@ import {
 import { Spinner } from "@/components/shared/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
+import apiClient from "@/api/axios";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -58,11 +60,20 @@ export default function RegisterForm() {
 		},
 	});
 
+	// eslint-disable-next-line react-hooks/incompatible-library
 	const password = form.watch("password");
 	const strengthRules = usePasswordStrength(password);
 
 	const onSubmit = async (data: RegisterData) => {
 		console.log("Register payload:", data);
+		try {
+			await apiClient.post("/auth/register", data);
+			toast.success("Registration successful!");
+			form.reset();
+		} catch (error) {
+			console.error(error);
+			toast.error("Registration failed. Please try again.");
+		}
 	};
 
 	return (

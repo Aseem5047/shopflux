@@ -1,0 +1,26 @@
+import type { AuthUser } from "@/types";
+import { create } from "zustand";
+
+type AuthState = {
+	user: AuthUser | null;
+	isAuthenticated: boolean;
+	setUser: (user: AuthUser | null) => void;
+	logout: () => void;
+};
+
+export const useAuthStore = create<AuthState>((set) => ({
+	user: null,
+	isAuthenticated: false,
+
+	setUser: (user) =>
+		set({
+			user,
+			isAuthenticated: !!user,
+		}),
+
+	logout: () =>
+		set({
+			user: null,
+			isAuthenticated: false,
+		}),
+}));

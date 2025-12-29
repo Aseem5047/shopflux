@@ -15,6 +15,8 @@ import {
 import { Spinner } from "@/components/shared/Spinner";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import apiClient from "@/api/axios";
+import { toast } from "sonner";
 
 export default function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -27,14 +29,24 @@ export default function LoginForm() {
 		},
 	});
 
+	// eslint-disable-next-line react-hooks/incompatible-library
 	const password = form.watch("password");
 
-	const onSubmit = (data: LoginData) => {
+	const onSubmit = async (data: LoginData) => {
 		const payload = data.identifier.includes("@")
 			? { email: data.identifier, password: data.password }
 			: { username: data.identifier, password: data.password };
 
 		console.log("Login payload:", payload);
+
+		try {
+			await apiClient.post("/auth/login", payload);
+			toast.success("Authenticated successfully!");
+			form.reset();
+		} catch (error) {
+			console.error(error);
+			toast.error("Login failed. Please try again.");
+		}
 	};
 
 	return (
