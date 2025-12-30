@@ -15,11 +15,15 @@ import {
 import { Spinner } from "@/components/shared/Spinner";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import apiClient from "@/api/axios";
 import { toast } from "sonner";
+import { useLogin } from "@/features/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
+	const { mutateAsync: loginUser, isPending } = useLogin();
+
+	const navigate = useNavigate();
 
 	const form = useForm<LoginData>({
 		resolver: zodResolver(loginSchema),
@@ -37,15 +41,14 @@ export default function LoginForm() {
 			? { email: data.identifier, password: data.password }
 			: { username: data.identifier, password: data.password };
 
-		console.log("Login payload:", payload);
-
 		try {
-			await apiClient.post("/auth/login", payload);
+			await loginUser(payload);
 			toast.success("Authenticated successfully!");
 			form.reset();
-		} catch (error) {
-			console.error(error);
-			toast.error("Login failed. Please try again.");
+			navigate("/");
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			toast.error(err?.response?.data?.message ?? "Login failed");
 		}
 	};
 
@@ -121,10 +124,10 @@ export default function LoginForm() {
 
 				<button
 					type="submit"
-					disabled={form.formState.isSubmitting}
+					disabled={isPending}
 					className="button gradientButton gap-2"
 				>
-					{form.formState.isSubmitting ? <Spinner /> : "Login"}
+					{isPending ? <Spinner /> : "Login"}
 				</button>
 			</form>
 		</Form>

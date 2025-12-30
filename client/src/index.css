@@ -55,6 +55,7 @@ section {
 ::-webkit-scrollbar {
 	height: 0.25rem;
 	width: 0.5rem;
+	display: none;
 }
 
 ::-webkit-scrollbar-thumb {

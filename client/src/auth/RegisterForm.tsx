@@ -17,16 +17,21 @@ import {
 import { Spinner } from "@/components/shared/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
-import apiClient from "@/api/axios";
 import { toast } from "sonner";
+import { useRegister } from "@/features/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [showScrollHint, setShowScrollHint] = useState(false);
 
+	const { mutateAsync: registerUser, isPending } = useRegister();
+
 	const formRef = useRef<HTMLFormElement | null>(null);
 	const bottomRef = useRef<HTMLDivElement | null>(null);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const el = formRef.current;
@@ -67,12 +72,17 @@ export default function RegisterForm() {
 	const onSubmit = async (data: RegisterData) => {
 		console.log("Register payload:", data);
 		try {
-			await apiClient.post("/auth/register", data);
+			await registerUser(data);
 			toast.success("Registration successful!");
 			form.reset();
-		} catch (error) {
+			navigate("/");
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
 			console.error(error);
-			toast.error("Registration failed. Please try again.");
+			toast.error(
+				error?.response?.data?.message ??
+					"Registration failed. Please try again."
+			);
 		}
 	};
 
@@ -234,10 +244,10 @@ export default function RegisterForm() {
 
 				<button
 					type="submit"
-					disabled={form.formState.isSubmitting}
+					disabled={isPending}
 					className="button gradientButton gap-2"
 				>
-					{form.formState.isSubmitting ? <Spinner /> : "Register"}
+					{isPending ? <Spinner /> : "Register"}
 				</button>
 
 				<div ref={bottomRef} />

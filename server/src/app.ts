@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import authRoutes from "./modules/auth/auth.routes";
+import { errorHandler } from "./middlewares/error.middleware";
+import { requestLogger } from "./middlewares/logger.middleware";
 
 const app = express();
 
@@ -14,9 +17,15 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(requestLogger);
+
 // health check
 app.get("/api/health", (_req, res) => {
 	res.json({ status: "ok", service: "ShopFlux Backend" });
 });
+
+app.use("/api/auth", authRoutes);
+
+app.use(errorHandler);
 
 export default app;
