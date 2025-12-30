@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes";
+import walletRoutes from "./modules/wallet/wallet.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import { requestLogger } from "./middlewares/logger.middleware";
 
@@ -25,6 +26,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/wallet", walletRoutes);
 
 app.use(errorHandler);
 

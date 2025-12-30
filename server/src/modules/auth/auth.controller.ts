@@ -9,6 +9,7 @@ import {
 } from "../../utils/jwt";
 import { AppError } from "../../utils/AppError";
 import { create } from "domain";
+import { publishUserRegistered } from "../../events/publishers/auth.publisher";
 
 const ACCESS_COOKIE = {
 	httpOnly: true,
@@ -33,6 +34,8 @@ export const register = async (req: Request, res: Response) => {
 		email,
 		password,
 	});
+
+	await publishUserRegistered(user._id.toString());
 
 	const tokenId = crypto.randomUUID();
 
@@ -125,10 +128,16 @@ export const refresh = async (req: Request, res: Response) => {
 	const payload = verifyRefreshToken(token);
 
 	try {
-		const exists = await redisClient.get(payload.tokenId);
-		if (!exists) throw new AppError(401, "Session expired");
+		const exists = await redisClient.get(`refresh:${payload.tokenId}`);
+		if (!exists) {
+			throw new AppError(401, "Session expired please login again");
+		}
 	} catch (err) {
-		// Redis unavailable → force re-login
+		if (err instanceof AppError) {
+			throw err; // preserve original meaning
+		}
+
+		// Redis down / network error
 		throw new AppError(401, "Please login again");
 	}
 
