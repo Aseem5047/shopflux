@@ -1,7 +1,7 @@
 import { Wallet } from "../../models/wallet.model";
 import { AppError } from "../../utils/AppError";
 import { WalletTransaction } from "../../models/walletTransaction.model";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 export const getWalletByUserId = async (userId: string) => {
 	const wallet = await Wallet.findOne({ userId });

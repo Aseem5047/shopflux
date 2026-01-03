@@ -109,58 +109,66 @@ export const logout = async (req: Request, res: Response) => {
 
 export const getProfile = async (req: Request, res: Response) => {
 	const { userId } = req.user!;
+	const cacheKey = `user:profile:${userId}`;
+
+	// 1. Try Redis first
+	const cachedUser = await redisClient.get(cacheKey);
+
+	if (cachedUser) {
+		return res.json(JSON.parse(cachedUser.toString()));
+	}
+
+	// 2. Fallback to DB
 	const { user } = await getUserProfile(userId);
 
-	res.json({
+	const profile = {
 		userId: user._id,
 		username: user.username,
 		fullname: user.fullname,
 		email: user.email,
 		role: user.role,
 		createdAt: user.createdAt,
+	};
+
+	// 3. Store in Redis (TTL: 10 minutes)
+	await redisClient.set(cacheKey, JSON.stringify(profile), {
+		EX: 60 * 10,
 	});
+
+	res.json(profile);
 };
 
 export const refresh = async (req: Request, res: Response) => {
 	const token = req.cookies.refreshToken;
-	if (!token) throw new AppError(401, "Token missing");
+	if (!token) {
+		throw new AppError(401, "Refresh token missing");
+	}
 
-	const payload = verifyRefreshToken(token);
+	let payload: { userId: string; tokenId: string };
+
+	try {
+		payload = verifyRefreshToken(token);
+	} catch {
+		throw new AppError(401, "Invalid refresh token");
+	}
 
 	try {
 		const exists = await redisClient.get(`refresh:${payload.tokenId}`);
+
 		if (!exists) {
-			throw new AppError(401, "Session expired please login again");
+			throw new AppError(401, "Session expired, please login again");
 		}
 	} catch (err) {
 		if (err instanceof AppError) {
-			throw err; // preserve original meaning
+			throw err;
 		}
-
-		// Redis down / network error
 		throw new AppError(401, "Please login again");
 	}
-
-	await redisClient.del(`refresh:${payload.tokenId}`);
-
-	const newTokenId = crypto.randomUUID();
 
 	const newAccess = signAccessToken({
 		userId: payload.userId,
 		role: "USER",
 	});
 
-	const newRefresh = signRefreshToken({
-		userId: payload.userId,
-		tokenId: newTokenId,
-	});
-
-	await redisClient.set(`refresh:${newTokenId}`, payload.userId, {
-		EX: 60 * 60 * 24 * 7,
-	});
-
-	res
-		.cookie("accessToken", newAccess, ACCESS_COOKIE)
-		.cookie("refreshToken", newRefresh, REFRESH_COOKIE)
-		.sendStatus(200);
+	res.cookie("accessToken", newAccess, ACCESS_COOKIE).sendStatus(200);
 };

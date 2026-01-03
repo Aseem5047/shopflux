@@ -56,7 +56,7 @@ const walletTransactionSchema = new Schema<WalletTransactionDocument>(
 );
 
 walletTransactionSchema.index(
-	{ walletId: 1, type: 1, referenceType: 1, referenceId: 1 },
+	{ walletId: 1, referenceType: 1, referenceId: 1 },
 	{ unique: true }
 );
 

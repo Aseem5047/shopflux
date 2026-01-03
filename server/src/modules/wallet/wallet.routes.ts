@@ -5,12 +5,13 @@ import {
 	debitUserWallet,
 } from "./wallet.controller";
 import { requireAuth } from "../../middlewares/auth.middleware";
+import { requireInternalAuth } from "../../middlewares/internal.middleware";
 
 const router = Router();
 
 router.get("/me", requireAuth, getMyWallet);
 
-router.post("/internal/credit", creditUserWallet);
-router.post("/internal/debit", debitUserWallet);
+router.post("/credit", requireInternalAuth, creditUserWallet);
+router.post("/debit", requireInternalAuth, debitUserWallet);
 
 export default router;
