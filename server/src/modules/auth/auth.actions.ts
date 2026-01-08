@@ -1,4 +1,3 @@
-import { get } from "node:http";
 import { User } from "../../models/User.model";
 import { AppError } from "../../utils/AppError";
 import { hashPassword, comparePassword } from "../../utils/hash";

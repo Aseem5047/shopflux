@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 			return {
 				user: null,
 				isAuthenticated: false,
-				isInitialized: true,
+				initialized: true,
 			};
 		}),
 }));

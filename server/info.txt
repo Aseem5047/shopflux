@@ -1,0 +1,74 @@
+The same stream can be consumed by multiple workers, and each worker decides what logic to run for a specific event type in that stream.
+
+🔁 What actually happens step-by-step
+
+1️⃣ Event is published (once)
+XADD auth:events * type USER_REGISTERED userId=123
+
+
+This event:
+
+Exists once
+
+Is immutable
+
+Lives in the stream forever (or until trimmed)
+
+2️⃣ Multiple workers read the SAME stream
+
+Example:
+
+Worker	Stream	Consumer Group
+Wallet	auth:events	wallet-auth-group
+Email	auth:events	email-auth-group
+Analytics	auth:events	analytics-auth-group
+
+👉 Same stream, different groups
+
+3️⃣ Each worker gets the event independently
+
+Internally Redis does this:
+
+auth:events
+ ├── group: wallet-auth-group  → delivered
+ ├── group: email-auth-group   → delivered
+ └── group: analytics-auth-group → delivered
+
+
+Acknowledging in one group does nothing to the others.
+
+4️⃣ Worker decides what to do (this is key)
+
+Inside each worker:
+
+const eventHandlers = {
+  USER_REGISTERED: handleUserRegistered,
+  PASSWORD_RESET: handlePasswordReset,
+};
+
+
+So when an event arrives:
+
+if (handler exists for this type) {
+  run logic
+} else {
+  ignore
+}
+
+
+👉 Workers do not care about events they don’t understand.
+
+🧠 Important subtle point (very important)
+
+Workers do NOT subscribe to specific events.
+They subscribe to streams.
+
+Filtering by event type is your application logic, not Redis’s job.
+
+Redis only guarantees:
+
+Delivery
+
+Ordering (per stream)
+
+Reliability

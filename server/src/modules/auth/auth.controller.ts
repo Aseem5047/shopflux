@@ -8,7 +8,6 @@ import {
 	verifyRefreshToken,
 } from "../../utils/jwt";
 import { AppError } from "../../utils/AppError";
-import { create } from "domain";
 import { publishUserRegistered } from "../../events/publishers/auth.publisher";
 
 const ACCESS_COOKIE = {
