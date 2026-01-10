@@ -245,7 +245,7 @@ export default function RegisterForm() {
 				<button
 					type="submit"
 					disabled={isPending}
-					className="button gradientButton gap-2"
+					className="button gradientButton gap-2 mt-4"
 				>
 					{isPending ? <Spinner /> : "Register"}
 				</button>

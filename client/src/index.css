@@ -93,11 +93,22 @@ section {
 
 @layer utilities {
 	.gradientButton {
-		@apply bg-linear-to-r from-blue-600 to-[#03a8f4] text-white;
+		@apply cursor-pointer text-white transition 
+		   bg-linear-to-r from-blue-600 to-[#03a8f4]
+	       hover:bg-linear-to-r hover:from-[#03a8f4] hover:to-blue-600 disabled:opacity-80
+	       disabled:cursor-not-allowed
+	       disabled:hover:from-blue-600
+	       disabled:hover:to-[#03a8f4];
 	}
 
 	.gradientButtonAlternate {
-		@apply bg-linear-to-r from-[#03a8f4] to-blue-600 text-white;
+		@apply cursor-pointer text-white transition
+	       bg-linear-to-r from-[#03a8f4] to-blue-600
+	       hover:from-blue-600 hover:to-[#03a8f4]
+	       disabled:cursor-not-allowed
+	       disabled:opacity-50
+	       disabled:hover:from-[#03a8f4]
+	       disabled:hover:to-blue-600;
 	}
 
 	.gradientContainer {
@@ -143,9 +154,7 @@ section {
 		shadow-md
 		rounded-lg
 		font-medium
-		text-base
-		mt-4
-		hover:opacity-80 transition-transform active:scale-95 cursor-pointer;
+		text-base;
 	}
 
 	.authenticationContainer {

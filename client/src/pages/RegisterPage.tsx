@@ -22,7 +22,10 @@ const RegisterPage = () => {
 				<p className="text-center text-base md:text-lg  font-normal mt-4">
 					Already have an account?
 				</p>
-				<button className="button gradientButton" onClick={handleStateChange}>
+				<button
+					className="button gradientButton mt-4"
+					onClick={handleStateChange}
+				>
 					Authenticate
 				</button>
 			</div>
