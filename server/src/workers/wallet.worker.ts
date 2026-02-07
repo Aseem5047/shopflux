@@ -30,7 +30,7 @@ const eventHandlers: Record<string, Function> = {
 
 export const startWalletWorker = async () => {
 	await createGroupIfNotExists(AUTH_STREAM, WALLET_AUTH_GROUP);
-	console.log("💳 Wallet worker started");
+	console.log("Wallet worker started");
 
 	consumeStream(AUTH_STREAM, WALLET_AUTH_GROUP, CONSUMER);
 

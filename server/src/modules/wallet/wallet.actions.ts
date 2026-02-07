@@ -1,8 +1,11 @@
-import { Wallet } from "../../models/wallet.model";
-import { AppError } from "../../utils/AppError";
-import { WalletTransaction } from "../../models/walletTransaction.model";
 import mongoose from "mongoose";
+import { Wallet } from "../../models/wallet.model";
+import { WalletTransaction } from "../../models/walletTransaction.model";
+import { AppError } from "../../utils/AppError";
 
+/**
+ * Get wallet by userId
+ */
 export const getWalletByUserId = async (userId: string) => {
 	const wallet = await Wallet.findOne({ userId });
 
@@ -13,6 +16,9 @@ export const getWalletByUserId = async (userId: string) => {
 	return wallet;
 };
 
+/**
+ * Credit wallet
+ */
 export const creditWallet = async ({
 	userId,
 	amount,
@@ -26,37 +32,48 @@ export const creditWallet = async ({
 	referenceType: string;
 	type?: "CREDIT" | "REFUND" | "ADJUSTMENT";
 }) => {
+	if (amount <= 0) {
+		throw new AppError(400, "Amount must be greater than zero");
+	}
+
+	if (!referenceId || !referenceType) {
+		throw new AppError(400, "Invalid transaction reference");
+	}
+
 	const session = await mongoose.startSession();
 
 	try {
-		session.startTransaction();
+		let updatedWallet: any;
 
-		const wallet = await Wallet.findOne({ userId }).session(session);
+		await session.withTransaction(async () => {
+			const wallet = await Wallet.findOne({ userId }).session(session);
+			if (!wallet) {
+				throw new AppError(404, "Wallet not found");
+			}
 
-		if (!wallet) throw new AppError(404, "Wallet not found");
+			updatedWallet = await Wallet.findOneAndUpdate(
+				{ _id: wallet._id },
+				{ $inc: { balance: amount } },
+				{ session, new: true }
+			);
 
-		await WalletTransaction.create(
-			[
-				{
-					walletId: wallet._id,
-					userId,
-					amount,
-					type,
-					referenceId,
-					referenceType,
-				},
-			],
-			{ session }
-		);
+			await WalletTransaction.create(
+				[
+					{
+						walletId: wallet._id,
+						userId,
+						amount,
+						type,
+						referenceId,
+						referenceType,
+					},
+				],
+				{ session }
+			);
+		});
 
-		wallet.balance += amount;
-		await wallet.save({ session });
-
-		await session.commitTransaction();
-
-		return wallet;
-	} catch (err) {
-		await session.abortTransaction();
+		return updatedWallet;
+	} catch (err: any) {
 		if (err.code === 11000) {
 			throw new AppError(409, "Duplicate transaction");
 		}
@@ -66,6 +83,9 @@ export const creditWallet = async ({
 	}
 };
 
+/**
+ * Debit wallet
+ */
 export const debitWallet = async ({
 	userId,
 	amount,
@@ -79,47 +99,58 @@ export const debitWallet = async ({
 	referenceType: string;
 	type?: "DEBIT" | "ADJUSTMENT";
 }) => {
+	if (amount <= 0) {
+		throw new AppError(400, "Amount must be greater than zero");
+	}
+
+	if (!referenceId || !referenceType) {
+		throw new AppError(400, "Invalid transaction reference");
+	}
+
 	const session = await mongoose.startSession();
 
 	try {
-		session.startTransaction();
+		let updatedWallet: any;
 
-		const wallet = await Wallet.findOne({ userId }).session(session);
-		if (!wallet) throw new AppError(404, "Wallet not found");
+		await session.withTransaction(async () => {
+			const wallet = await Wallet.findOne({ userId }).session(session);
+			if (!wallet) {
+				throw new AppError(404, "Wallet not found");
+			}
 
-		await WalletTransaction.create(
-			[
+			updatedWallet = await Wallet.findOneAndUpdate(
 				{
-					walletId: wallet._id,
-					userId,
-					amount,
-					type,
-					referenceId,
-					referenceType,
+					_id: wallet._id,
+					balance: { $gte: amount },
 				},
-			],
-			{ session }
-		);
+				{ $inc: { balance: -amount } },
+				{ session, new: true }
+			);
 
-		const updatedWallet = await Wallet.findOneAndUpdate(
-			{ _id: wallet._id, balance: { $gte: amount } },
-			{ $inc: { balance: -amount } },
-			{ session, new: true }
-		);
+			if (!updatedWallet) {
+				throw new AppError(400, "Insufficient balance");
+			}
 
-		if (!updatedWallet) {
-			throw new AppError(400, "Insufficient balance");
-		}
+			await WalletTransaction.create(
+				[
+					{
+						walletId: wallet._id,
+						userId,
+						amount,
+						type,
+						referenceId,
+						referenceType,
+					},
+				],
+				{ session }
+			);
+		});
 
-		await session.commitTransaction();
 		return updatedWallet;
 	} catch (err: any) {
-		await session.abortTransaction();
-
 		if (err.code === 11000) {
 			throw new AppError(409, "Duplicate transaction");
 		}
-
 		throw err;
 	} finally {
 		session.endSession();
