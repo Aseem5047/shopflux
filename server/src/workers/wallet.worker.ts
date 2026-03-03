@@ -14,6 +14,7 @@ const WALLET_AUTH_GROUP = "wallet-auth-group";
 /* -------------------- CONSUMER -------------------- */
 
 const CONSUMER = "wallet-consumer-1";
+// const CONSUMER = "order-consumer-1";
 
 /* -------------------- EVENT HANDLERS -------------------- */
 

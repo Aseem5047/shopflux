@@ -28,6 +28,7 @@ const walletTransactionSchema = new Schema<WalletTransactionDocument>(
 		},
 		userId: {
 			type: Schema.Types.ObjectId,
+			ref: "User",
 			required: true,
 			index: true,
 		},
