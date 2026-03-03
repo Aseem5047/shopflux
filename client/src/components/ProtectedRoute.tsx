@@ -1,11 +1,12 @@
 import type { JSX } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 	const { isAuthenticated } = useAuthStore();
+	const location = useLocation();
 
-	if (!isAuthenticated) {
+	if (!isAuthenticated && location.pathname !== "/") {
 		return <Navigate to="/login" replace />;
 	}
 

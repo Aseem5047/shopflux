@@ -33,7 +33,7 @@ export default function AuthLayout() {
 	return (
 		<SessionGate>
 			<div
-				className={`min-h-screen w-full bg-gray-100 flex items-center justify-center ${
+				className={`min-h-dvh w-full bg-gray-100 flex items-center justify-center ${
 					direction === "left" ? "slideInLeft" : "slideInRight"
 				}`}
 			>

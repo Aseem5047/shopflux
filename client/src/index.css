@@ -93,22 +93,11 @@ section {
 
 @layer utilities {
 	.gradientButton {
-		@apply cursor-pointer text-white transition 
-		   bg-linear-to-r from-blue-600 to-[#03a8f4]
-	       hover:bg-linear-to-r hover:from-[#03a8f4] hover:to-blue-600 disabled:opacity-80
-	       disabled:cursor-not-allowed
-	       disabled:hover:from-blue-600
-	       disabled:hover:to-[#03a8f4];
+		@apply cursor-pointer text-white transition bg-linear-to-r from-blue-600 to-[#03a8f4] hover:bg-linear-to-r hover:from-[#03a8f4] hover:to-blue-600 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-[#03a8f4];
 	}
 
 	.gradientButtonAlternate {
-		@apply cursor-pointer text-white transition
-	       bg-linear-to-r from-[#03a8f4] to-blue-600
-	       hover:from-blue-600 hover:to-[#03a8f4]
-	       disabled:cursor-not-allowed
-	       disabled:opacity-50
-	       disabled:hover:from-[#03a8f4]
-	       disabled:hover:to-blue-600;
+		@apply cursor-pointer text-white transition bg-linear-to-r from-[#03a8f4] to-blue-600 hover:from-blue-600 hover:to-[#03a8f4] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:from-[#03a8f4] disabled:hover:to-blue-600;
 	}
 
 	.gradientContainer {
@@ -120,7 +109,7 @@ section {
 	}
 
 	.hoverEffectText {
-		@apply hover:bg-primary hover:text-white hover:px-4 hover:py-2 rounded-xl transition-all duration-500 transform ease-in-out  cursor-pointer;
+		@apply hover:bg-primary hover:text-white hover:px-4 hover:py-2 rounded-xl transition-all duration-500 transform ease-in-out cursor-pointer;
 	}
 
 	.flexCenter {
@@ -134,44 +123,15 @@ section {
 
 @layer components {
 	.input {
-		@apply w-full
-		border
-		rounded-lg
-		border-gray-300
-		outline-none
-		p-4
-		hover:bg-gray-100
-		focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition;
+		@apply w-full border rounded-lg border-gray-300 outline-none p-4 hover:bg-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition;
 	}
 
 	.button {
-		@apply flex
-		items-center
-		justify-center
-		p-4
-		w-full
-		max-w-md
-		shadow-md
-		rounded-lg
-		font-medium
-		text-base;
+		@apply flex items-center justify-center p-4 w-full max-w-md shadow-md rounded-lg font-medium text-base;
 	}
 
 	.authenticationContainer {
-		@apply w-full
-		h-screen
-		md:w-[90vw]
-		md:max-w-5xl
-		md:h-[90vh]
-		bg-white
-		grid
-		grid-cols-1
-		md:grid-cols-2
-		md:rounded-2xl
-		md:shadow-xl
-		border
-		border-gray-200
-		overflow-hidden;
+		@apply w-full h-screen md:w-[90vw] md:max-w-5xl md:h-[90vh] bg-white grid grid-cols-1 md:grid-cols-2 md:rounded-2xl md:shadow-xl border border-gray-200 overflow-hidden;
 	}
 }
 
@@ -191,6 +151,7 @@ section {
 		transform: translateX(100px);
 		opacity: 0;
 	}
+
 	100% {
 		transform: translateX(0);
 		opacity: 1;
@@ -202,6 +163,7 @@ section {
 		transform: translateX(-100px);
 		opacity: 0;
 	}
+
 	100% {
 		transform: translateX(0);
 		opacity: 1;

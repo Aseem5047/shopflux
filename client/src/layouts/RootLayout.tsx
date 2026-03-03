@@ -9,11 +9,15 @@ export default function RootLayout() {
 	return (
 		<SessionGate>
 			<NetworkGate>
-				<Navbar />
-				<ProtectedRoute>
-					<Outlet />
-				</ProtectedRoute>
-				<Footer />
+				<div className="flex flex-col h-dvh w-full overflow-hidden">
+					<Navbar />
+					<ProtectedRoute>
+						<main className="flex-1 overflow-y-auto">
+							<Outlet />
+							<Footer />
+						</main>
+					</ProtectedRoute>
+				</div>
 			</NetworkGate>
 		</SessionGate>
 	);

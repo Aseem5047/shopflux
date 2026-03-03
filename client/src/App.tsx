@@ -6,9 +6,5 @@ export default function App() {
 	useSession();
 	useNetworkStatus();
 
-	return (
-		<main className="h-screen overflow-auto">
-			<AppRoutes />
-		</main>
-	);
+	return <AppRoutes />;
 }
