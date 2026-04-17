@@ -5,7 +5,7 @@ import SplashScreen from "@/components/shared/SplashScreen";
 const MIN_SPLASH_TIME = 400;
 
 export const SessionGate = ({ children }: { children: React.ReactNode }) => {
-	const { initialized } = useAuthStore();
+	const initialized = useAuthStore((s) => s.initialized);
 	const [showSplash, setShowSplash] = useState(true);
 
 	useEffect(() => {

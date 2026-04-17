@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { registerSchema } from "./auth.schema";
-import type { RegisterData } from "./auth.types";
+import { registerSchema } from "../../lib/auth.schema";
 
 import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 
@@ -20,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRegister } from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import type { RegisterData } from "@/types";
 
 export default function RegisterForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +81,7 @@ export default function RegisterForm() {
 			console.error(error);
 			toast.error(
 				error?.response?.data?.message ??
-					"Registration failed. Please try again."
+				"Registration failed. Please try again."
 			);
 		}
 	};
@@ -191,9 +191,8 @@ export default function RegisterForm() {
 									{strengthRules.map((rule) => (
 										<li key={rule.label} className="flex items-center gap-2">
 											<span
-												className={`h-2 w-2 rounded-full transition-colors ${
-													rule.valid ? "bg-green-500" : "bg-gray-300"
-												}`}
+												className={`h-2 w-2 rounded-full transition-colors ${rule.valid ? "bg-green-500" : "bg-gray-300"
+													}`}
 											/>
 											<span
 												className={

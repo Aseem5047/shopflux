@@ -6,7 +6,8 @@ import { NetworkGate } from "@/components/shared/NetworkGate";
 import { SessionGate } from "@/components/shared/SessionGate";
 
 export default function AuthLayout() {
-	const { isAuthenticated, initialized } = useAuthStore();
+	const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+	const initialized = useAuthStore((s) => s.initialized);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const authToastId = useRef<string | number | null>(null);
@@ -33,9 +34,8 @@ export default function AuthLayout() {
 	return (
 		<SessionGate>
 			<div
-				className={`min-h-dvh w-full bg-gray-100 flex items-center justify-center ${
-					direction === "left" ? "slideInLeft" : "slideInRight"
-				}`}
+				className={`min-h-dvh w-full bg-gray-100 flex items-center justify-center ${direction === "left" ? "slideInLeft" : "slideInRight"
+					}`}
 			>
 				<NetworkGate>
 					<Outlet />

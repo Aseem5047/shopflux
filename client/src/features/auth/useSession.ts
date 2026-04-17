@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { getMe } from "./auth.api";
 import { useAuthStore } from "@/store/auth.store";
+import { getMe } from "./auth.api";
 
 export const useSession = () => {
 	const { setUser, logout } = useAuthStore();
